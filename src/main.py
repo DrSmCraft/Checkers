@@ -29,13 +29,18 @@ pause = False
 
 # Setting up Game Board
 board = util.Board(light_color=constants.LIGHT_COLOR, dark_color=constants.DARK_COLOR, surface=window, grid_dim=constants.GRID_DIM)
+player1 = util.Player(color=constants.PLAYER_1_COLOR, board=board, start=(0,0))
+player1.draw()
 
+player2 = util.Player(color=constants.PLAYER_2_COLOR, board=board, start=(5, 0))
+player2.draw()
 
 # Main Game Loop
 while run:
     # If not paused, draw all objects
     if not pause:
         board.draw()
+        player1.draw()
 
     pygame.display.flip()
 
