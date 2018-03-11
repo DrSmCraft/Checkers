@@ -76,7 +76,6 @@ class Player():
             if num % constants.GRID_DIM[0] == 0:
                 row += 1
                 col = 1
-            print(row, col)
             if self.board.get_square((row, col)).is_dark():
                 self.checkers.append(Checker(surface=self.board.surface, color=self.color, coord=(row, col)))
 

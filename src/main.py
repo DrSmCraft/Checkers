@@ -32,7 +32,7 @@ board = util.Board(light_color=constants.LIGHT_COLOR, dark_color=constants.DARK_
 player1 = util.Player(color=constants.PLAYER_1_COLOR, board=board, start=(0,0))
 player1.draw()
 
-player2 = util.Player(color=constants.PLAYER_2_COLOR, board=board, start=(5, 0))
+player2 = util.Player(color=constants.PLAYER_2_COLOR, board=board, start=(0, 6))
 player2.draw()
 
 # Main Game Loop
@@ -41,6 +41,7 @@ while run:
     if not pause:
         board.draw()
         player1.draw()
+        player2.draw()
 
     pygame.display.flip()
 
@@ -54,7 +55,8 @@ while run:
                 elif not pause:
                     pause = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button  == 4:
-                print(4)
-            elif event.button == 5:
-                print(5)
+            # 1 = LeftClick, 3 = RightClick
+            if event.button  == 1:
+                pass
+            elif event.button == 3:
+                pass

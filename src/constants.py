@@ -16,7 +16,7 @@ import math
 
 # Window Settings
 WINDOW_NAME = "Play Checkers!" # "Play Checkers!"
-WINDOW_DIM = (1000, 1000) # (1000, 1000)
+WINDOW_DIM = (500, 500) # (1000, 1000)
 
 
 
