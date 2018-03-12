@@ -27,15 +27,28 @@ class Square():
         self.dark = dark
         self.contains = contains
 
+    # Draw the Square
     def draw(self):
-        rect = (self.coord[0] * constants.SQUARE_SIZE,
+        rect = self.get_bounds()
+        pygame.draw.rect(self.surface, self.color, rect)
+
+    # return true if square is a dark square ---> if checker pieces can move onto it
+    def is_dark(self):
+        return self.dark
+
+    # Return whatever is in the square
+    def contains_obj(self):
+        return self.contains()
+
+    # Put an object into square
+    def put_obj(self, obj):
+        self.contains = obj
+
+    def get_bounds(self):
+        return (self.coord[0] * constants.SQUARE_SIZE,
                 self.coord[1] * constants.SQUARE_SIZE,
                 constants.SQUARE_SIZE,
                 constants.SQUARE_SIZE)
-        pygame.draw.rect(self.surface, self.color, rect)
-
-    def is_dark(self):
-        return self.dark
 
 
 # Checker Class
@@ -47,10 +60,12 @@ class Checker():
         self.coord = coord
         self.size = size
 
+    # Draw the checker piece
     def draw(self):
         coordy = (self.coord[0] * constants.SQUARE_SIZE) - constants.SQUARE_SIZE / 2
         coordx = (self.coord[1] * constants.SQUARE_SIZE) - constants.SQUARE_SIZE / 2
         pygame.draw.circle(self.surface, self.color, (int(coordx), int(coordy)), self.size)
+
 
 # Payer Class
 class Player():
@@ -61,13 +76,13 @@ class Player():
         self.start = start
         self.reset()
 
-
+    # Draw all the checkers that player has
     def draw(self):
         for x in self.checkers:
             x.draw()
 
+    # Reset Board to starting position ---> called when player is created
     def reset(self):
-        # TODO place all checker pieces down in correct order
         self.checkers = []
         col = 0 + self.start[0]
         row = 0 + self.start[1]
@@ -92,19 +107,26 @@ class Board():
 
         self.create_grid()
 
-
+    # Draw the Board
     def draw(self):
         for y in self.grid:
             for x in y:
                 x.draw()
 
+    # return the square at coord
     def get_square(self, coord):
         return self.grid[coord[0]][coord[1]]
 
+    # return the square at raw screen coords
+    def get_square_raw_coord(self, coord):
+        return self.get_square((coord[0]//(constants.WINDOW_DIM[0]//self.grid_dim[0]), coord[1]//(constants.WINDOW_DIM[1]//self.grid_dim[1])))
+
+    # Reset the board
     def reset(self):
         self.player1.reset()
         self.player2.reset()
 
+    # creates a 2-dim list of squares ---> called when Board is created
     def create_grid(self):
         col = self.light_color
         for y in range(0, self.grid_dim[0]+1):
@@ -118,9 +140,41 @@ class Board():
                     col = self.light_color
             self.grid.append(lst)
 
+# Selector class
+# Used for Selecting Game Pieces
+class Selector():
+    def __init__(self, loc_color=constants.LOCATION_COLOR, des_color=constants.DESTINATION_COLOR, loc=None, des=None, surface=None):
+        self.loc_color = loc_color
+        self.loc = loc
 
+        self.des_color = des_color
+        self.des = des
 
+        self.visible = False
+        self.surface = surface
+        self.thickness = 6
 
+    def is_visible(self):
+        return self.visible
 
+    def set_visible(self, arg):
+        self.visible = arg
 
+    def draw(self):
+        if self.visible:
+            # Draw loc selector
+            pygame.draw.rect(self.surface, self.loc_color, self.loc.get_bounds(), self.thickness)
+            # Draw dest selector
+            pygame.draw.rect(self.surface, self.des_color, self.des.get_bounds(), self.thickness)
 
+    def get_des(self):
+        return self.des
+
+    def get_loc(self):
+        return self.loc
+
+    def set_des(self, obj):
+        self.des = obj
+
+    def set_loc(self, obj):
+        self.loc = obj

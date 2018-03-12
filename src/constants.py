@@ -33,4 +33,6 @@ PLAYER_2_COLOR = (0, 0, 200) # (100, 100, 100)
 # Checker Settings
 CHECKER_SIZE = SQUARE_SIZE//2 # 50
 
-
+# Selector color
+LOCATION_COLOR = (0, 100, 0)
+DESTINATION_COLOR = (0, 200, 0)
