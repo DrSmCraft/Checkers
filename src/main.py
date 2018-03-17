@@ -16,6 +16,42 @@ import constants
 import util
 import pygame
 
+
+def wait_for_input():
+    while run:
+        for event in pygame.event:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+            # 1 = LeftClick, 3 = RightClick
+                if event.button == 1:
+                    left_click_coord = pygame.mouse.get_pos()
+                    select.des = board.get_square_raw_coord((0, 0))
+                    select.loc = board.get_square_raw_coord(left_click_coord)
+
+                elif event.button == 3:
+                    right_click_coord = pygame.mouse.get_pos()
+                    select.loc = board.get_square_raw_coord((0, 0))
+                    select.des = board.get_square_raw_coord(right_click_coord)
+                select.set_visible(True)
+
+
+def debug_squares():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # 1 = LeftClick, 3 = RightClick
+                if event.button == 1:
+                    left_click_coord = pygame.mouse.get_pos()
+                    print(board.get_square_raw_coord(left_click_coord))
+        try:
+            draw(board, select)
+        except AttributeError:
+            pass
+
+def draw(*args):
+    for obj in args:
+        obj.draw()
+    pygame.display.flip()
+
 # Initializing
 pygame.init()
 
@@ -39,10 +75,7 @@ select = util.Selector(surface=window, des_color=constants.DESTINATION_COLOR, lo
 while run:
     # If not paused, draw all objects
     if not pause:
-        board.draw()
-        player1.draw()
-        player2.draw()
-        select.draw()
+        draw(board, select)
 
     pygame.display.flip()
 
@@ -57,15 +90,4 @@ while run:
                     pause = True
             elif event.key == pygame.K_ESCAPE:
                 run = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # 1 = LeftClick, 3 = RightClick
-            if event.button == 1:
-                left_click_coord = pygame.mouse.get_pos()
-                select.des = board.get_square_raw_coord((0, 0))
-                select.loc = board.get_square_raw_coord(left_click_coord)
-
-            elif event.button == 3:
-                right_click_coord = pygame.mouse.get_pos()
-                select.loc = board.get_square_raw_coord((0, 0))
-                select.des = board.get_square_raw_coord(right_click_coord)
-            select.set_visible(True)
+        debug_squares()

@@ -20,29 +20,30 @@ import pygame
 
 # Square Class
 class Square():
-    def __init__(self, coord=(0, 0), color=constants.LIGHT_COLOR, surface=None, dark=False, contains=None):
+    def __init__(self, coord=(0, 0), color=constants.LIGHT_COLOR, surface=None, dark=False, cargo=None):
         self.coord = coord
         self.color = color
         self.surface = surface
         self.dark = dark
-        self.contains = contains
-
+        self.cargo = cargo
     # Draw the Square
     def draw(self):
         rect = self.get_bounds()
         pygame.draw.rect(self.surface, self.color, rect)
+        if self.cargo != None:
+            self.cargo.draw()
 
     # return true if square is a dark square ---> if checker pieces can move onto it
     def is_dark(self):
         return self.dark
 
     # Return whatever is in the square
-    def contains_obj(self):
-        return self.contains()
+    def contains_cargo(self):
+        return self.cargo()
 
     # Put an object into square
-    def put_obj(self, obj):
-        self.contains = obj
+    def put_cargo(self, obj):
+        self.cargo = obj
 
     def get_bounds(self):
         return (self.coord[0] * constants.SQUARE_SIZE,
@@ -92,7 +93,9 @@ class Player():
                 row += 1
                 col = 1
             if self.board.get_square((row, col)).is_dark():
-                self.checkers.append(Checker(surface=self.board.surface, color=self.color, coord=(row, col)))
+                checker_piece = Checker(surface=self.board.surface, color=self.color, coord=(row, col))
+                self.checkers.append(checker_piece)
+                self.board.get_square((row, col)).put_cargo(checker_piece)
 
 # Board Class
 class Board():
