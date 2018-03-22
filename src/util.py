@@ -67,56 +67,42 @@ class Board():
             for entry in row:
                 entry.draw()
 
-
+# Player Class
+# If PvP, create two player objects in main file
 class Player():
-    def __init__(self, surface, color, board, positions):
+    def __init__(self, surface, color, board, positions, name="Player"):
         self.surface = surface
         self.color = color
         self.board = board
         self.positions = positions
+        self.name = name
         self.game_pieces = [[None for row in range(self.board.grid_dim[0])] for col in range(self.board.grid_dim[1])]
         self.reset()
 
+    # Reset to game_pieces starting positions
     def reset(self):
         for row in self.positions:
             for pos in row:
-                #square = self.board.get_square(pos)
                 self.add_checker(pos)
-        # for row in rows:
-            # for col in range(10):
-                # square = self.board.get_square((row, col))
-                # if square.get_dark():
-                    # self.add_checker((row-1, col-1))
-                # if square.get_dark():
-                #     check = Checker(self.surface, self, self.color, square)
-                #     square.clear_cargo()
-                #     square.set_cargo(check)
-                #     self.game_pieces.append(check)
-
-        # for row in [4]:
-        #     for col in range(10 + 1):
-        #         square = self.board.get_square((row, col))
-        #         square.clear_cargo()
-
+    # Draw Game Pieces
     def draw(self):
-        #print(self.game_pieces)
         for obj in self.game_pieces:
             obj.draw()
 
+    # Add a Checker at position
     def add_checker(self, position):
         self.game_pieces[position[0]][position[1]] = Checker(self.surface, self, self.color, self.board.get_square(position))
 
+    def get_game_pieces(self):
+        return self.game_pieces
 
+    def get_name(self):
+        return self.name
 
+    def set_name(self, new_name):
+        self.name = new_name
 
-
-
-
-
-
-
-
-
+# Class for selecting which checkers to move
 class Selector():
     def __init__(self, loc_color=constants.LOCATION_COLOR, des_color=constants.DESTINATION_COLOR, loc=None, des=None, surface=None):
         self.loc_color = loc_color
