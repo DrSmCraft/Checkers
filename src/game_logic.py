@@ -70,6 +70,14 @@ class GameLogic():
     def set_turn(self, id):
         self.turn = id
 
+    def move(self, checker_square, target_square):
+        target_square.clear_cargo()
+
+        target_square.set_cargo(checker_square.get_cargo())
+        checker_square.clear_cargo()
+        print(target_square)
+
+
 
 def show_checks(surface, board):
     num = 0
@@ -81,5 +89,3 @@ def show_checks(surface, board):
                 coord = (x.contains_obj().coord[0] * 100 + 50, x.contains_obj().coord[1] * 100 + 50)
                 pygame.draw.circle(surface, (255, 0, 255), coord, 5)
                 num += 1
-    print(num)
-    pygame.display.flip()

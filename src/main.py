@@ -1,4 +1,24 @@
 """
+Name: main.py
+Author: Sam O
+Date: 3/19/18
+
+Info:
+
+
+
+
+"""
+
+
+# Imports
+import pygame
+import constants
+import util
+
+
+
+"""
 Name:
 Author:
 Date:
@@ -15,23 +35,36 @@ Info:
 import constants
 import util
 import pygame
-
+import game_logic
 
 def wait_for_input():
+    right_click_coord = (0, 0)
+    left_click_coord = (0, 0)
+    select.set_visible(True)
+
     while run:
-        for event in pygame.event:
+        select.loc = board.get_square_raw_coord([left_click_coord[0], left_click_coord[1]])
+        select.des = board.get_square_raw_coord([right_click_coord[0], right_click_coord[1]])
+        for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
             # 1 = LeftClick, 3 = RightClick
                 if event.button == 1:
+                    #print("left")
                     left_click_coord = pygame.mouse.get_pos()
-                    select.des = board.get_square_raw_coord((0, 0))
-                    select.loc = board.get_square_raw_coord(left_click_coord)
 
                 elif event.button == 3:
+                    #print("right")
                     right_click_coord = pygame.mouse.get_pos()
-                    select.loc = board.get_square_raw_coord((0, 0))
-                    select.des = board.get_square_raw_coord(right_click_coord)
-                select.set_visible(True)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_INSERT:
+                    logic.move(select.des, select.loc)
+
+
+        draw(board, select)
+
+
+
 
 
 def debug_squares():
@@ -41,9 +74,18 @@ def debug_squares():
                 # 1 = LeftClick, 3 = RightClick
                 if event.button == 1:
                     left_click_coord = pygame.mouse.get_pos()
-                    print(board.get_square_raw_coord(left_click_coord))
+                    sq = board.get_square_raw_coord(left_click_coord)
+                    #print(left_click_coord, board.get_square_raw_coord(left_click_coord).position)
+                    print(sq, sq.cargo)
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    board.reset()
+
+                #elif event.key == pygame.K_BACKSPACE:
+                    #board.player1.reset()
         try:
-            draw(board, select)
+            draw(select, board)
         except AttributeError:
             pass
 
@@ -65,15 +107,16 @@ turn = True
 
 # Setting up Game Board
 board = util.Board(light_color=constants.LIGHT_COLOR, dark_color=constants.DARK_COLOR, surface=window, grid_dim=constants.GRID_DIM)
-player1 = util.Player(color=constants.PLAYER_1_COLOR, board=board, start=(0,0))
-player2 = util.Player(color=constants.PLAYER_2_COLOR, board=board, start=(0, 6))
+player1 = util.Player(window, constants.PLAYER_1_COLOR, board, constants.PLAYER_1_CHECKER_POSITIONS)
+player2 = util.Player(window, constants.PLAYER_2_COLOR, board, constants.PLAYER_2_CHECKER_POSITIONS)
 select = util.Selector(surface=window, des_color=constants.DESTINATION_COLOR, loc_color=constants.LOCATION_COLOR)
+logic = game_logic.GameLogic()
 
 
-
+print(player1.game_pieces)
 # Main Game Loop
 while run:
-    # If not paused, draw all objects
+    # If not paused, draw all util
     if not pause:
         draw(board, select)
 
@@ -91,3 +134,6 @@ while run:
             elif event.key == pygame.K_ESCAPE:
                 run = False
         debug_squares()
+        #wait_for_input()
+
+
