@@ -36,7 +36,8 @@ PLAYER_2_CHECKER_POSITIONS = [[(9, 0), (9, 2), (9, 4), (9, 6), (9, 8)],
 
 # Checker Settings
 CHECKER_SIZE = SQUARE_SIZE // 2  # 50
-
+DOUBLE_CHECKER_INSIDE_COLOR = (255, 255, 0)  # (255, 255, 0)
+DOUBLE_CHECKER_INSIDE_SIZE = SQUARE_SIZE // 3  # 25
 # Selector color
 LOCATION_COLOR = (0, 100, 0)  # (0, 100, 0)
 DESTINATION_COLOR = (0, 200, 0)  # (0, 200, 0)

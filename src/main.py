@@ -19,7 +19,7 @@ import pygame
 import game_logic
 
 # Function that waits for a player to move
-# It also make sure move is valid using logic class
+# It also make sure move is valid using the GameLogic class
 def wait_for_input():
     print("Current Turn: " + str(logic.get_current_turn().get_name()))
     acceptable = False
@@ -44,7 +44,7 @@ def wait_for_input():
                     right_click_coord = pygame.mouse.get_pos()
                     select.set_visible(True)
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_INSERT:
+                if event.key == pygame.K_RETURN:
                     select.set_visible(True)
                     move_valid = logic.check_player_move_valid(select.get_loc(), select.get_des())
                     if move_valid:
@@ -57,7 +57,7 @@ def wait_for_input():
 
 # Function for debugging
 def debug_squares():
-    window.display.set_caption(constants.WINDOW_NAME + ": Debug")
+    pygame.display.set_caption(constants.WINDOW_NAME + ": Debug")
     while True:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -65,16 +65,18 @@ def debug_squares():
                 if event.button == 1:
                     left_click_coord = pygame.mouse.get_pos()
                     sq = board.get_square_raw_coord(left_click_coord)
-                    #print(left_click_coord, board.get_square_raw_coord(left_click_coord).position)
-                    print(sq)
-                    print(logic.check_player_ownership(sq))
-
+                    try:
+                        sq.get_cargo().stack()
+                    except:
+                        pass
+                    print(sq.get_cargo())
             # elif event.type == pygame.KEYDOWN:
             #     if event.key == pygame.K_SPACE:
             #         board.reset()
 
 
         draw(board)
+
 
 # function to draw given arguments
 def draw(*args):

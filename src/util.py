@@ -84,8 +84,8 @@ class Checker():
         self.player = player
         self.color = color
         self.square = square
-        self.square.set_cargo(self)
         self.size = size
+        self.bind_square()
 
     def get_player(self):
         return self.player
@@ -105,13 +105,33 @@ class Checker():
     def set_square(self, new_square):
         self.square = new_square
 
+    def bind_square(self):
+        self.square.set_cargo(self)
+
     def draw(self):
         coordy = ((self.square.position[0] + 1) * constants.SQUARE_SIZE) - (constants.SQUARE_SIZE // 2)
         coordx = ((self.square.position[1] + 1) * constants.SQUARE_SIZE) - (constants.SQUARE_SIZE // 2)
-        pygame.draw.circle(self.surface, self.color, (int(coordy), int(coordx)), self.size)
+        pygame.draw.circle(self.surface, self.color, (int(coordy), int(coordx)), int(self.size))
 
     def __str__(self):
         return "Checker of " + str(self.color) + " at " + str(self.square.get_position())
+
+    def stack(self):
+        self.__class__ = DoubleChecker
+
+
+class DoubleChecker(Checker):
+
+    def draw(self):
+        coordy = ((self.square.position[0] + 1) * constants.SQUARE_SIZE) - (constants.SQUARE_SIZE // 2)
+        coordx = ((self.square.position[1] + 1) * constants.SQUARE_SIZE) - (constants.SQUARE_SIZE // 2)
+        pygame.draw.circle(self.surface, self.color, (int(coordy), int(coordx)), int(self.size))
+        pygame.draw.circle(self.surface, constants.DOUBLE_CHECKER_INSIDE_COLOR, (int(coordy), int(coordx)), int(constants.DOUBLE_CHECKER_INSIDE_SIZE))
+
+
+    def __str__(self):
+        return "DoubleChecker of " + str(self.color) + " at " + str(self.square.get_position())
+
 
 
 # Board object
