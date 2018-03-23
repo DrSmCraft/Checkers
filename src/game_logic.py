@@ -15,6 +15,7 @@ import constants
 import pygame
 
 
+# This is the class for Game Logic and Gamerules
 class GameLogic():
     def __init__(self, board=None, player1=None, player2=None):
         self.board = board
@@ -32,7 +33,7 @@ class GameLogic():
         if self.check_player_ownership(loc_square):
             loc_acceptable = True
 
-        # Check if des square is acceptable
+        # Check if des square is valid
         if des_square.get_dark():
             if self.check_move(loc_square, des_square):
                 if des_square.get_cargo() is not None:
@@ -74,13 +75,15 @@ class GameLogic():
 
         if loc_pos[0] != des_pos[0] or loc_pos[1] != des_pos[1]:
             direction_acceptable = True
-        if des_pos[0] - loc_pos[0] == 1 or des_pos[1] - loc_pos[1] == 1:
+        if abs(des_pos[0] - loc_pos[0]) == 1 or abs(des_pos[1] - loc_pos[1]) == 1:
             distance_acceptable = True
         return distance_acceptable and direction_acceptable
 
+    # return which player has current turn
     def get_current_turn(self):
         return self.players[self.turn]
 
+    # Switch turn to other player
     def switch_turn(self):
         if self.turn == 0:
             self.turn = 1
@@ -95,16 +98,3 @@ class GameLogic():
         target_square.clear_cargo()
         target_square.set_cargo(checker_square.get_cargo())
         checker_square.clear_cargo()
-
-
-
-def show_checks(surface, board):
-    num = 0
-
-    for y in board.grid:
-        for x in y:
-            if x.contains_obj() is not None:
-
-                coord = (x.contains_obj().coord[0] * 100 + 50, x.contains_obj().coord[1] * 100 + 50)
-                pygame.draw.circle(surface, (255, 0, 255), coord, 5)
-                num += 1

@@ -4,6 +4,7 @@ Author: Sam O
 Date: 3/19/18
 
 Info:
+This is the main file. It brings everything together.
 
 
 
@@ -17,7 +18,8 @@ import util
 import pygame
 import game_logic
 
-
+# Function that waits for a player to move
+# It also make sure move is valid using logic class
 def wait_for_input():
     print("Current Turn: " + str(logic.get_current_turn().get_name()))
     acceptable = False
@@ -53,13 +55,9 @@ def wait_for_input():
     logic.switch_turn()
 
 
-
-
-
-
-
-
+# Function for debugging
 def debug_squares():
+    window.display.set_caption(constants.WINDOW_NAME + ": Debug")
     while True:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -77,6 +75,8 @@ def debug_squares():
 
 
         draw(board)
+
+# function to draw given arguments
 def draw(*args):
     for obj in args:
         obj.draw()
@@ -103,7 +103,7 @@ logic = game_logic.GameLogic(player1=player1, player2=player2, board=board)
 
 # Main Game Loop
 while run:
-    # If not paused, draw all util
+    # If not paused, draw all board and selector
     if not pause:
         draw(board, select)
 
