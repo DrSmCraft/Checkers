@@ -75,8 +75,15 @@ class GameLogic():
 
         if loc_pos[0] != des_pos[0] or loc_pos[1] != des_pos[1]:
             direction_acceptable = True
-        if abs(des_pos[0] - loc_pos[0]) == 1 or abs(des_pos[1] - loc_pos[1]) == 1:
-            distance_acceptable = True
+        if type(loc_square.get_cargo()) is util.Checker:
+            if abs(des_pos[0] - loc_pos[0]) == 1 and abs(des_pos[1] - loc_pos[1]) == 1:
+                distance_acceptable = True
+        elif type(loc_square.get_cargo()) is util.DoubleChecker:
+            if abs(des_pos[0] - loc_pos[0]) == 1 and abs(des_pos[1] - loc_pos[1]) == 1:
+                distance_acceptable = True
+            elif abs(des_pos[0] - loc_pos[0]) == 2 and abs(des_pos[1] - loc_pos[1]) == 2:
+                distance_acceptable = True
+
         return distance_acceptable and direction_acceptable
 
     # return which player has current turn
@@ -93,8 +100,35 @@ class GameLogic():
     def set_turn(self, id):
         self.turn = id
 
+    def check_ownership(self, item, player):
+        if item.get_cargo() is None:
+            return False
+        elif type(item) is util.Square:
+            for row in player.get_game_pieces():
+                if item.get_cargo() in row:
+                    return True
+        return False
+
     # Move Game Piece from checker_square to target_square
     def move(self, checker_square, target_square):
         target_square.clear_cargo()
         target_square.set_cargo(checker_square.get_cargo())
         checker_square.clear_cargo()
+
+        if self.check_king_status(target_square, self.players[self.turn]):
+            target_square.get_cargo().stack()
+
+    def check_king_status(self, square, player):
+        if player is self.player1:
+            if square.get_position()[0] == constants.GRID_DIM[0] - 1:
+                if self.check_ownership(square, player):
+                    return True
+        elif player is self.player2:
+            if square.get_position()[0] == 0:
+                if self.check_ownership(square, player):
+                    return True
+        else:
+            return False
+
+
+
