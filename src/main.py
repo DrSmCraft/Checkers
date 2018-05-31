@@ -4,11 +4,7 @@ Author: Sam O
 Date: 3/19/18
 
 Info:
-This is the main file. It brings everything together.
-
-
-
-
+This is the main driver file. It brings everything together.
 """
 
 
@@ -17,6 +13,7 @@ import constants
 import util
 import pygame
 import game_logic
+
 
 # Function that waits for a player to move
 # It also make sure move is valid using the GameLogic class
@@ -94,6 +91,30 @@ pygame.display.set_caption(constants.WINDOW_NAME)
 run = True
 pause = False
 turn = True
+
+instructions = ["Hello, Lets play Checkers!",
+                "1 - Left Click on game piece that you want to move.",
+                "2 - Then Right click on square you want to move.",
+                "3 - Then press Enter on keyboard. That's it!", "FYI: Red goes first",
+                "",
+                "",
+                "",
+                "",
+                "...Press any key to Play..."]
+
+info_font = pygame.font.SysFont('Arial', 25)
+y = 50
+for string in instructions:
+    window.blit(info_font.render(string, True, constants.INSTRUCTION_TEXT_COLOR), (20, y))
+    y += 30
+pygame.display.flip()
+
+instructions_read = False
+
+while not instructions_read:
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            instructions_read = True
 
 # Setting up Game Board
 board = util.Board(light_color=constants.LIGHT_COLOR, dark_color=constants.DARK_COLOR, surface=window, grid_dim=constants.GRID_DIM)

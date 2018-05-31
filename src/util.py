@@ -1,5 +1,5 @@
 """
-Name: objects.py
+Name: util.py
 Author: Sam O
 Date: 3/19/18
 
@@ -62,12 +62,7 @@ class Square():
             #print(self.cargo)
             pass
 
-    def get_info(self):
-        return {"surface": self.surface,
-                "position": self.position,
-                "color": self.color,
-                "dark": self.dark,
-                "cargo": self.cargo}
+
 
     def __str__(self):
         return "Square at position " + str(self.position) + " of color " + str(self.color) + " containing " + str(self.cargo)
@@ -163,6 +158,7 @@ class Board():
                     lst.append(Square(self.surface, (y, x), color=col, dark=True))
                     col = self.light_color
             self.matrix.append(lst)
+
     def get_square(self, coord):
         return self.matrix[coord[0]][coord[1]]
 

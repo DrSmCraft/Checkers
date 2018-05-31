@@ -12,7 +12,6 @@ This is the file that defines gamerules and checks whether actions done by playe
 # Imports
 import util
 import constants
-import pygame
 
 
 # This is the class for Game Logic and Gamerules
